@@ -1,0 +1,15 @@
+<div class="container-fluid">
+    <div class="details-container">
+        <button class="btn-add" routerLink="/home" routerLinkActive="active">
+            <span></span>
+            home
+        </button>
+        <h1>Descreption Of File :-</h1>
+        <h3>{{fileData.descreption}}</h3>
+        <img *ngIf="fileData.fileType != 'application/pdf'" [src]="share.apiUrlFile + fileData.documentURL" class="img">
+
+        <div class="pdf-container">
+            <pdf-viewer *ngIf="fileData.fileType == 'application/pdf'" [src]="fileData.documentURL" class="img"></pdf-viewer>
+        </div>
+    </div>
+</div>

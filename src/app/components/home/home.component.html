@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="files-list">
+        <button class="btn-add" routerLink="/add-file" routerLinkActive="active" >
+            <span></span>
+            Add File
+        </button>
+
+        <table class="table table-hover table-light table-bordered">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>file</td>
+                    <td>descreption</td>
+                    <td>Creation Date</td>
+                    <td>operation</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listFilesData | paginate: { itemsPerPage: 6, currentPage: p }; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                        <img *ngIf="item.fileType != 'application/pdf'" [src]="share.apiUrlFile + item.documentURL" class="img">
+                        <div *ngIf="item.fileType == 'application/pdf'">
+                            <pdf-viewer [src]="item.documentURL" class="img"></pdf-viewer>
+                        </div>
+                    </td>
+                    <td>{{ item.descreption }}</td>
+                    <td>{{ item.creatationDate | date: 'dd-MM-yyyy' }}</td>
+                    <td>
+                        <button class="btn-add" (click)="showDeatils(item)">
+                            <span></span>
+                            details
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" previousLabel="prev" nextLabel="next">
+        </pagination-controls>
+    </div>
+</div>
