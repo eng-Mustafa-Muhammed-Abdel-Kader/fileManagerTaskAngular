@@ -5,7 +5,7 @@ import { FileManagerService } from "src/app/core/services/file-manager.service";
 import { CheckAndUploadFileService } from "src/app/core/services/check-and-upload-file.service";
 import { SharedApiService } from "src/app/core/services/shared-api.service";
 import { Response } from "src/app/core/models/response.model";
-import { HttpEventType } from '@angular/common/http';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-file',
@@ -65,28 +65,15 @@ export class AddFileComponent implements OnInit {
 
     this.showLoading = true;
     this.fileToUpload = <File>files[0];
-
-    this.check.checkFile(files[0].name).subscribe(res => {
-      
-      var response: Response = res as Response;
-      if (response.status == 1) {
-        let fileToUploadfinish = files[0];
-        this.fileType = this.fileToUpload.type;
-          //Show image preview
-          var reader = new FileReader();
-          reader.onload = (event:any) => {
-            this.image = reader.result;
-          }
-          reader.readAsDataURL(fileToUploadfinish); 
-        
-        this.showLoading = false
-      } else {
-        // this.fileToUpload = null;
-        this.message = response.message;
-        this.showLoading = false;
-        this.showError = true;
+    let fileToUploadfinish = files[0];
+    this.fileType = this.fileToUpload.type;
+      //Show image preview
+      var reader = new FileReader();
+      reader.onload = (event:any) => {
+        this.image = reader.result;
       }
-    });
+      reader.readAsDataURL(fileToUploadfinish); 
+    this.showLoading = false;
   }
 
   handleFileInput(file: File) {
@@ -121,8 +108,11 @@ export class AddFileComponent implements OnInit {
         this.handleFileInput(this.fileToUpload);
       }
       else if (event.type === HttpEventType.Response){
+        debugger
         this.onUploadFinished.emit(event.body);
-        this.fullPath = `/Resources/${this.fileToUpload.name}`;
+        this.ResponseData = event.body as Response;
+        let splitPath: string[] = (this.ResponseData.data as string).split('\\');
+        this.fullPath = `/Resources/${splitPath[splitPath.length - 1]}`;
         this.fileS.oneFile.documentURL = this.fullPath;
         this.fileS.oneFile.fileType = this.fileToUpload.type;
         this.fileS.addNewFiles().subscribe(res => {

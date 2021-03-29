@@ -5,9 +5,9 @@ import { HttpClient } from "@angular/common/http";
   providedIn: 'root'
 })
 export class SharedApiService {
-
-  apiUrl: string = "https://localhost:44305/api/";
-  apiUrlFile: string = "https://localhost:44305";
+  
+  apiUrlFile: string = "http://localhost:56122";
+  apiUrl: string = `${this.apiUrlFile}/api/`;
   apiUrlModify: string = "";
 
   constructor(public http: HttpClient) { }
